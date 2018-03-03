@@ -134,16 +134,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
-    <Content Include="dll\ANT_NET.dll">
+    <Content Include="ANT_NET.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dll\ANT_WrappedLib.dll">
+    <Content Include="ANT_WrappedLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dll\DSI_CP210xManufacturing_3_1.dll">
+    <Content Include="DSI_CP210xManufacturing_3_1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dll\DSI_SiUSBXp_3_1.dll">
+    <Content Include="DSI_SiUSBXp_3_1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Pause_16x.png" />
