@@ -120,6 +120,7 @@ namespace Yuyushiki
         public readonly int TargetPower;
         public readonly int Duration;
         public readonly string Desc;
+        public readonly List<int> LoopIndex = new List<int>();
 
         public long AccumMilliJ = 0;
         public DateTime PlayStartedAt;
@@ -138,23 +139,39 @@ namespace Yuyushiki
         public readonly int Start;
         public readonly int Length;
         public readonly string Message;
+        public readonly bool IsLoop;
+        public readonly int LoopCount;
+        public readonly SectionOrError LoopSection;
 
-        SectionOrError(int targetPower, int duration, string desc, bool isError, int start, int length, string message) : base(targetPower, duration, desc)
+        SectionOrError(int targetPower, int duration, string desc, bool isError, int start, int length, string message, bool isLoop, int loopCount, SectionOrError loopSection) : base(targetPower, duration, desc)
         {
             IsError = isError;
             Start = start;
             Length = length;
             Message = message;
+            IsLoop = isLoop;
+            LoopCount = loopCount;
+            LoopSection = loopSection;
         }
 
         public static SectionOrError GetSection(int targetPower, int duration, string desc)
         {
-            return new SectionOrError(targetPower, duration, desc, false, 0, 0, null);
+            return new SectionOrError(targetPower, duration, desc, false, 0, 0, null, false, 0, null);
+        }
+
+        public static SectionOrError GetSection(int targetPower, int duration, string desc, SectionOrError loopSection)
+        {
+            return new SectionOrError(targetPower, duration, desc, false, 0, 0, null, false, 0, loopSection);
         }
 
         public static SectionOrError GetError(int start, int length, string message)
         {
-            return new SectionOrError(0, 0, null, true, start, length, message);
+            return new SectionOrError(0, 0, null, true, start, length, message, false, 0, null);
+        }
+
+        public static SectionOrError GetLoop(int count)
+        {
+            return new SectionOrError(0, 0, null, false, 0, 0, null, true, count, null);
         }
     }
 
@@ -166,11 +183,14 @@ namespace Yuyushiki
             EncoderFallback.ExceptionFallback,
             DecoderFallback.ReplacementFallback);
 
+        List<SectionOrError> loopSectionList = new List<SectionOrError>();
+
         List<SectionOrError> ParseText()
         {
             int offset = 0;
             var leftText = Text;
             var ret = new List<SectionOrError>();
+            loopSectionList = new List<SectionOrError>();
             while (leftText.Length > 0)
             {
                 bool isLastLine = false;
@@ -288,13 +308,46 @@ namespace Yuyushiki
             }
         }
 
-        SectionOrError ParseLine(int offset, string line)
+        SectionOrError ParseLine(int offset, string line, int depth = 0)
         {
+            if (loopSectionList.Count < depth)
+                return SectionOrError.GetError(0, line.Length, "Loop mark is too many.");
+
             if (line[0] == '#')
                 return null;
+            int sectionHeadIdx = 0;
+            while (line[sectionHeadIdx] == '%')
+            {
+                sectionHeadIdx = IndexOfNextNonWhiteSpace(line, sectionHeadIdx + 1);
+                depth++;
+            }
+            if (loopSectionList.Count < depth)
+                return SectionOrError.GetError(offset, line.Length, "Bad loop mark is found.");
+            while (loopSectionList.Count > depth)
+            {
+                loopSectionList.RemoveAt(loopSectionList.Count - 1);
+            }
 
-            int targetPowerTailIdx = IndexOfNextWhiteSpace(line, 0);
-            if (targetPowerTailIdx == 0)
+            if (line.Substring(sectionHeadIdx).ToLower().IndexOf("loop") == 0)
+            {
+                int countIdx = IndexOfNextNonWhiteSpace(line, sectionHeadIdx + 4);
+                if (countIdx == line.Length)
+                    return SectionOrError.GetError(offset, line.Length, "Loop header 'LOOP n' lacks 'n'.");
+                try
+                {
+                    var n = Int32.Parse(line.Substring(countIdx));
+                    var section = SectionOrError.GetLoop(n);
+                    loopSectionList.Add(section);
+                    return section;
+                }
+                catch (Exception)
+                {
+                    return SectionOrError.GetError(offset, line.Length, "Loop header 'LOOP n' don't have digits. 'n' must be digits.");
+                }
+            }
+
+            int targetPowerTailIdx = IndexOfNextWhiteSpace(line, sectionHeadIdx);
+            if (targetPowerTailIdx == sectionHeadIdx)
                 return SectionOrError.GetError(offset, 1, "Each lines of plan should start with # or number.");
             if (targetPowerTailIdx == line.Length)
                 return SectionOrError.GetError(offset, line.Length, "No duration column and description.");
@@ -303,8 +356,9 @@ namespace Yuyushiki
             if (mayW == 'w' || mayW == 'W')
                 targetPowerTailAdj = -1;
             int targetPower;
-            if (!Int32.TryParse(line.Substring(0, targetPowerTailIdx + targetPowerTailAdj), out targetPower) || targetPower < 0)
-                return SectionOrError.GetError(offset, targetPowerTailIdx, "Target power column should be a natural number or zero.");
+            var s = line.Substring(sectionHeadIdx, targetPowerTailIdx + targetPowerTailAdj - sectionHeadIdx);
+            if (!Int32.TryParse(line.Substring(sectionHeadIdx, targetPowerTailIdx + targetPowerTailAdj - sectionHeadIdx), out targetPower) || targetPower < 0)
+                return SectionOrError.GetError(offset, targetPowerTailIdx - sectionHeadIdx, "Target power column should be a natural number or zero.");
 
             int durationHeadIdx = IndexOfNextNonWhiteSpace(line, targetPowerTailIdx);
             if (durationHeadIdx == line.Length)
@@ -326,7 +380,16 @@ namespace Yuyushiki
             if (!CheckDesc(desc))
                 return SectionOrError.GetError(offset + descHeadIdx, line.Length - descHeadIdx, "Description should be ASCII characters.");
 
-            return SectionOrError.GetSection(targetPower, duration, desc);
+            while (loopSectionList.Count > depth)
+            {
+                loopSectionList.RemoveAt(loopSectionList.Count - 1);
+            }
+            if (depth == 0)
+                return SectionOrError.GetSection(targetPower, duration, desc);
+            else
+            {
+                return SectionOrError.GetSection(targetPower, duration, desc, loopSectionList[depth - 1]);
+            }
         }
 
         public Tuple<int, int, string> GetFirstError()
@@ -346,13 +409,58 @@ namespace Yuyushiki
             return null;
         }
 
+        Tuple<int, List<PlanSection>> UnrollLoop(List<SectionOrError> soes, int loopIdx)
+        {
+            var loopSection = soes[loopIdx];
+            var inner = new List<PlanSection>();
+            int i = loopIdx + 1;
+            for (; i < soes.Count; i++)
+            {
+                var soe = soes[i];
+                if (soe.IsLoop)
+                {
+                    var r = UnrollLoop(soes, i);
+                    i = r.Item1 - 1;
+                    inner.AddRange(r.Item2);
+                    continue;
+                }
+                if (soe.LoopSection == loopSection)
+                    inner.Add(soe);
+                else
+                    break;
+            }
+            var outer = new List<PlanSection>();
+            for (int k = 0; k < loopSection.LoopCount; k ++)
+            {
+                var innerIdxed = new List<PlanSection>();
+                foreach (var ips in inner)
+                {
+                    var nps = new PlanSection(ips.TargetPower, ips.Duration, ips.Desc);
+                    nps.LoopIndex.AddRange(ips.LoopIndex);
+                    nps.LoopIndex.Add(k);
+                    innerIdxed.Add(nps);
+                }
+                outer.AddRange(innerIdxed);
+            }
+            return new Tuple<int, List<PlanSection>>(i, outer);
+        }
+
         public List<PlanSection> Parse()
         {
             var ret = new List<PlanSection>();
-            foreach (var soe in ParseText())
+            var pt = ParseText();
+            for (int i = 0; i < pt.Count; i ++)
             {
+                var soe = pt[i];
                 if (soe.IsError)
                     throw new Exception("Plan is malformed.");
+                if (soe.IsLoop)
+                {
+                    var r = UnrollLoop(pt, i);
+                    i = r.Item1 - 1;
+                    ret.AddRange(r.Item2);
+                    continue;
+                }
                 ret.Add(soe);
             }
             return ret;

@@ -272,20 +272,22 @@ namespace Yuyushiki
 
         private void NewFile()
         {
+            if (IsPlanTextModified && MessageBox.Show("Discard all changes?", "Yuyushiki",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+            {
+                return;
+            }
+
             var l = new List<string>();
             l.Add("# Plan Example. Remove '#' to enable each section.");
             l.Add("#160W\t20m\tWarming Up");
-            l.Add("#260W\t4m\tInterval 1-1");
-            l.Add("#160W\t3m\tRest 1-1");
-            l.Add("#260W\t4m\tInterval 1-2");
-            l.Add("#160W\t3m\tRest 1-2");
-            l.Add("#260W\t4m\tInterval 1-3");
+            l.Add("#LOOP 3");
+            l.Add("#%   260W\t4m\tInterval 1");
+            l.Add("#%   160W\t3m\tRest 1");
             l.Add("#160W\t1h30m\tLSD");
-            l.Add("#260W\t4m\tInterval 2-1");
-            l.Add("#160W\t3m\tRest 2-1");
-            l.Add("#260W\t4m\tInterval 2-2");
-            l.Add("#160W\t3m\tRest 2-2");
-            l.Add("#260W\t4m\tInterval 2-3");
+            l.Add("#LOOP 3");
+            l.Add("#%   260W\t4m\tInterval 2");
+            l.Add("#%   160W\t3m\tRest 2");
             l.Add("#160W\t0\tLSD");
             l.Add("# Duration 0 is unlimited count up mode.");
             var t = String.Join("\r\n", l);

@@ -224,6 +224,7 @@ namespace Yuyushiki
                 s.PlayStartedAt = now;
                 vfdFormat.TargetPower = s.TargetPower;
                 vfdFormat.Desc = s.Desc;
+                vfdFormat.LoopIndex = s.LoopIndex;
                 vfdFormat.DurationString = Plan.BuildDurationString(s.Duration);
             }
             else
@@ -264,12 +265,11 @@ namespace Yuyushiki
             }
 
             var now = DateTime.Now;
+            var s = sections[currentSectionIdx];
+
             if ((now - lastPowerReceivedAt).TotalSeconds > POWER_RECEIVE_ERROR_S)
                 vfdFormat.RecentPower = -1;
-            else
-                vfdFormat.RecentPower = rollingAverage.Average(now);
 
-            var s = sections[currentSectionIdx];
             if (s.PlayStartedAt == DateTime.MinValue)
             {
                 // first event of first section
@@ -320,6 +320,7 @@ namespace Yuyushiki
                     {
                         vfdPanel.Overwrite("Next:", 1, 0);
                         vfdFormat.Desc = sections[currentSectionIdx + 1].Desc;
+                        vfdFormat.LoopIndex = sections[currentSectionIdx + 1].LoopIndex;
                     }
                 }
             }
@@ -334,6 +335,8 @@ namespace Yuyushiki
             var now = DateTime.Now;
             lastPowerReceivedAt = now;
             rollingAverage.Append(now, accumPower, count);
+            vfdFormat.RecentPower = rollingAverage.Average(now);
+            vfdPanel.Update();
             if (pausedAt == DateTime.MinValue)
                 plan.AccumJ(accumPower, count, now, sections[currentSectionIdx]);
         }
@@ -448,6 +451,27 @@ namespace Yuyushiki
                 if (aveStr.Length > 4)
                     aveStr = aveStr.Substring(aveStr.Length - 4);
                 vfdPanel.Overwrite(String.Format("{0,4}W", aveStr), 0, 15);
+            }
+        }
+
+        public List<int> LoopIndex
+        {
+            set
+            {
+                if (value.Count == 0)
+                    return;
+                var s = "";
+                var buf = new List<int>();
+                buf.AddRange(value);
+                buf.Reverse();
+                foreach (var i in buf)
+                {
+                    if (s.Length == 0)
+                        s = " #" + (i + 1).ToString();
+                    else
+                        s += "-" + (i + 1).ToString();
+                }
+                vfdPanel.Overwrite(s, 1, 20 - s.Length);
             }
         }
     }

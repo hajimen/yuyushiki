@@ -15,14 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_058805CB19454B69A8C51FC06E50DBFA"
+        "MsmKey" = "8:_263FE4BFFDD840D8AA0E7569B805EF22"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_303465739D90187F26F5396EC37B35D4"
-        "OwnerKey" = "8:_A38688556114481A9CD2DBBD213C0716"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,19 +27,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_55CB189867814B94A9CB5DB74BAF28CC"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_88F02138690508E20DDAE6728B64F953"
+        "OwnerKey" = "8:_A38688556114481A9CD2DBBD213C0716"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_692126225DF542FD88374CB31C1BC38C"
+        "MsmKey" = "8:_98E977B15A1D4E578A22FB43BB448043"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_A38688556114481A9CD2DBBD213C0716"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D19B8CFD65CE4B94A791F02C30968F72"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -64,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_303465739D90187F26F5396EC37B35D4"
+        "OwnerKey" = "8:_88F02138690508E20DDAE6728B64F953"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -92,6 +92,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -154,10 +162,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_058805CB19454B69A8C51FC06E50DBFA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_263FE4BFFDD840D8AA0E7569B805EF22"
             {
-            "SourcePath" = "8:..\\Yuyushiki\\ref\\ANT_WrappedLib.dll"
-            "TargetName" = "8:ANT_WrappedLib.dll"
+            "SourcePath" = "8:..\\Yuyushiki\\DSI_SiUSBXp_3_1.dll"
+            "TargetName" = "8:DSI_SiUSBXp_3_1.dll"
             "Tag" = "8:"
             "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
             "Condition" = "8:"
@@ -174,14 +182,34 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_303465739D90187F26F5396EC37B35D4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_371289D9D7554FEE915C4E660D05AC01"
+            {
+            "SourcePath" = "8:..\\Yuyushiki\\app.ico"
+            "TargetName" = "8:app.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_88F02138690508E20DDAE6728B64F953"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ANT_NET, Version=2.4.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_303465739D90187F26F5396EC37B35D4"
+                    "_88F02138690508E20DDAE6728B64F953"
                     {
                     "Name" = "8:ANT_NET.dll"
                     "Attributes" = "3:512"
@@ -205,29 +233,9 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_371289D9D7554FEE915C4E660D05AC01"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_98E977B15A1D4E578A22FB43BB448043"
             {
-            "SourcePath" = "8:..\\Yuyushiki\\app.ico"
-            "TargetName" = "8:app.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55CB189867814B94A9CB5DB74BAF28CC"
-            {
-            "SourcePath" = "8:..\\Yuyushiki\\ref\\DSI_CP210xManufacturing_3_1.dll"
+            "SourcePath" = "8:..\\Yuyushiki\\DSI_CP210xManufacturing_3_1.dll"
             "TargetName" = "8:DSI_CP210xManufacturing_3_1.dll"
             "Tag" = "8:"
             "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
@@ -245,10 +253,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_692126225DF542FD88374CB31C1BC38C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D19B8CFD65CE4B94A791F02C30968F72"
             {
-            "SourcePath" = "8:..\\Yuyushiki\\ref\\DSI_SiUSBXp_3_1.dll"
-            "TargetName" = "8:DSI_SiUSBXp_3_1.dll"
+            "SourcePath" = "8:..\\Yuyushiki\\ANT_WrappedLib.dll"
+            "TargetName" = "8:ANT_WrappedLib.dll"
             "Tag" = "8:"
             "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
             "Condition" = "8:"
@@ -330,15 +338,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Yuyushiki"
-        "ProductCode" = "8:{74089129-9E8D-4BBB-B99D-3DCC94A4565B}"
-        "PackageCode" = "8:{F745CB4F-D077-436C-84F4-BA138E8DFB51}"
+        "ProductCode" = "8:{9D2DB1AB-7E0A-4EEF-989D-059E3A75542D}"
+        "PackageCode" = "8:{10007CE7-D275-4131-BEB6-50B03338F891}"
         "UpgradeCode" = "8:{BAE5FC47-A0FA-4D29-B5F8-E7A7207A4315}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.5"
+        "ProductVersion" = "8:0.1.6"
         "Manufacturer" = "8:Yuyushiki"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -871,7 +879,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A38688556114481A9CD2DBBD213C0716"
             {
-            "SourcePath" = "8:..\\Yuyushiki\\obj\\x86\\Debug\\Yuyushiki.exe"
+            "SourcePath" = "8:..\\Yuyushiki\\obj\\x86\\Release\\Yuyushiki.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_34455838D96D464CB898EDD30B5A4E57"
